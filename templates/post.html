@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
-<div class="forms">
-<h1>Create Moment</h1>
-    <form action="#" method="post" enctype="multipart/form-data">
-        <h2>Upload your Moment</h2>
-        <input type="file" name="moment" accept="image/png" required/><br>
-        <h2>Describe your Moment</h2>
-        <input type="text" name="description"/><br>
-        <h2>Caption</h2>
-        <input type="text" name="caption" required/><br><br>
-        <input type="submit" value="submit"/>
-    </form>
+<div class="center">
+    <div class="forms">
+        <h2>Create Moment</h2>
+        <form action="#" method="post" enctype="multipart/form-data">
+            <h3>Upload your Moment</h3>
+            <input type="file" name="moment" accept="image/png" required/><br>
+            <h3>Describe your Moment</h3>
+            <input type="text" name="description"/><br>
+            <h3>Caption</h3>
+            <input type="text" name="caption" required/><br><br>
+            <input type="submit" value="submit"/><br><br>
+        </form>
+    </div>
 </div>
 {% endblock %}

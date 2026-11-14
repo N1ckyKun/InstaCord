@@ -2,7 +2,7 @@
 {% block title %}{{info[1]}}'s profile{% endblock %}
 {% block content %}
 <div class="profile">
-    <img src="{{info[4]}}" alt="avatar">
+    <img class='acc' src="{{info[4]}}" alt="avatar">
     <b class="profile">{{info[1]}}</b>
 </div>
 <div class="profilebuttons">
@@ -14,6 +14,7 @@
     <div class="post">
         <img class='post' src="{{p[0]}}" alt="{{p[1]}}">
         <p class="post">{{p[2]}}</p>
+        <span class="post">created at {{p[3]}}</span>
     </div>
 {% endfor %}
 {% endblock %}

@@ -7,7 +7,7 @@ div {
 }
 
 body { 
-    background-color: #222222; 
+    background-color: #050505; 
 }
 
 p { color: white; }
@@ -15,6 +15,7 @@ p { color: white; }
 h1 {
     text-align: center;
     color: white;
+    font-size: 400%;
 }
 
 a.button:link, a.button:visited {
@@ -67,6 +68,14 @@ img.post {
 
 p.post {
     align-self: flex-start;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+}
+
+span.post {
+    align-self: flex-end;
+    color: white;
+    opacity: 50%;
 }
 
 /*Account*/
@@ -81,8 +90,11 @@ a.acc:hover, a.acc:active {
 }
 
 img.acc {
-    width: 1em;
-    height: auto;
+    width: 600px;
+    height: 600px;
+    object-fit: cover;
+    border-radius: 100%;
+    border: 5px solid #ffffff;
 }
 
 a.acc {
@@ -96,7 +108,6 @@ a.acc {
 div.profile {
     width: 600px;
     flex-direction: column;
-    background-color: #222222;
     padding:8px;
     color: white;
 }
@@ -111,11 +122,57 @@ div.profilebuttons {
 }
 
 /*Forms*/
+img.forms {
+    width: 600px;
+    height: auto;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    font-size: 24px;
+    padding: 10px 12px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+}
+
+input[type="file"] {
+    padding-left: 0px;
+    margin-left: 0px;
+    font-size: 24px;
+    padding: 10px 12px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+}
+
+input[type="submit"] {
+    font-size: 16px;
+    padding: 10px 24px;
+}
+
+input.forms[type="submit"] {
+    font-size: 16px;
+    padding: 10px 24px;
+    margin-left: 12px;
+}
+
+
 div.forms {
-    margin: 0 auto;
     display: flex;
     width: 600px;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    background-color: #222222;
+    color: white;
+    border-radius: 10%;
+}
+
+/*Avatar*/
+img.avatar {
+    height: 70px;
+    width: 70px;
+    object-fit: cover;
+    border-radius: 100%;
 }
