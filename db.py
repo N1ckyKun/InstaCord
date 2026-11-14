@@ -4,6 +4,7 @@ from flask import g, url_for
 def get_db():
     if "db" not in g:
         g.db = sqlite3.connect("insta.db")
+        g.db.execute("PRAGMA foreign_keys = ON")
         g.db.row_factory = sqlite3.Row
     return g.db
 
@@ -21,6 +22,10 @@ def insert_user(user,email,pswd):
     insch = "INSERT INTO users (username, email, pswd, avatar) VALUES (?,?,?,?)"
     cursor.execute(insch, (user,email,pswd,data_uri))
     db.commit()
+    idsch = "SELECT id FROM users WHERE username = ?"
+    cursor.execute(idsch, (user,))
+    result = cursor.fetchone()[0]
+    return result
 
 def it_exists(input, type):
     db = get_db()
@@ -49,32 +54,42 @@ def compare_pswd(user,pswd):
     result = cursor.fetchone()
     return result[0] == pswd
 
-def create_post(mmnt,capt,dscrpt,user):
+def create_post(mmnt,capt,dscrpt,userid):
     db = get_db()
     cursor = db.cursor()
     insch = "INSERT INTO posts (userid, caption, dscrpt, postimg) VALUES (?,?,?,?)"
-    cursor.execute(insch, (user,capt,dscrpt,mmnt))
+    cursor.execute(insch, (userid,capt,dscrpt,mmnt))
     db.commit()
 
 def get_posts():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM posts")
+    cursor.execute("SELECT * FROM posts ORDER BY created_at DESC, id DESC")
     result = cursor.fetchall()
     posts = []
     for p in result:
-        avtsch = "SELECT avatar FROM users WHERE username = ?"
+        avtsch = "SELECT avatar,username FROM users WHERE id = ?"
         cursor.execute(avtsch,(p[1],))
-        avtr = cursor.fetchone()[0]
-        post = [p[1],p[2],p[3],p[4],p[5],avtr]
+        result = cursor.fetchone()
+        avtr = result[0]
+        user = result[1]
+        post = [user,p[2],p[3],p[4],p[5],avtr]
         posts.append(post)
+    print(posts)
     return posts
 
-def change_avatar(data_uri, user):
+def update_info(user, new, parameter):
     db = get_db()
     cursor = db.cursor()
-    upsch = "UPDATE users SET avatar = ? WHERE username = ?"
-    cursor.execute(upsch, (data_uri, user))
+    if parameter == 'avatar':
+        upsch = "UPDATE users SET avatar = ? WHERE username = ?"
+    elif parameter == 'password':
+        upsch = "UPDATE users SET pswd = ? WHERE username = ?"
+    elif parameter == 'username':
+        upsch = "UPDATE users SET username = ? WHERE username = ?"
+    elif parameter == 'email':
+        upsch = "UPDATE users SET email = ? WHERE username = ?"
+    cursor.execute(upsch, (new, user))
     db.commit()
 
 def get_user_info(user):
@@ -84,19 +99,26 @@ def get_user_info(user):
     cursor.execute(usrsch, (user,))
     result = cursor.fetchone()
     info = []
-    info.append(result[1])
-    info.append(result[4])
+    for i in range(0,5):
+        info.append(result[i])
     print(info)
     return info
 
-def get_posts_from_user(user):
+def get_posts_from_user(userid):
     db = get_db()
     cursor = db.cursor()
-    pstsch = "SELECT * FROM posts WHERE userid = ?"
-    cursor.execute(pstsch, (user,))
+    pstsch = "SELECT * FROM posts WHERE userid = ? ORDER BY created_at DESC, id DESC"
+    cursor.execute(pstsch, (userid,))
     result = cursor.fetchall()
     posts = []
     for p in result:
         post = [p[2],p[3],p[4],p[5]]
         posts.append(post)
     return posts
+
+def delete_user(user):
+    db = get_db()
+    cursor = db.cursor()
+    delsch = "DELETE FROM users WHERE username = ?"
+    cursor.execute(delsch, (user,))
+    db.commit()

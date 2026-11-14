@@ -3,10 +3,11 @@
     <head>
         <title>Login</title>
         <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+        <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     </head>
     <body>
-        <b class="nav">InstaCord</b>
-        <a class="nav" href="/register">Register</a>
+        <b class="button nav">InstaCord</b>
+        <a class="button nav" href="/register">Register</a>
         <div class = "forms">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}

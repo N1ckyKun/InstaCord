@@ -1,10 +1,17 @@
 {% extends "base.html" %}
-{% block title %}{{info[0]}}'s profile{% endblock %}
+{% block title %}{{info[1]}}'s profile{% endblock %}
 {% block content %}
 <div class="profile">
-    <img src="{{info[1]}}" alt="avatar">
-    <b class="profile">{{info[0]}}</b>
+    <img src="{{info[4]}}" alt="avatar">
+    <b class="profile">{{info[1]}}</b>
     <span>(You)</span>
+</div>
+<div class="profilebuttons">
+    <a class="button" href="/username">Change Username</a>
+    <a class="button" href="/avatar">Change Avatar</a>
+    <a class="button" href="/email">Change Email</a>
+    <a class="button" href="/password">Change Password</a>
+    <a style="color: red" class="button" href="/delete">Delete Account</a>
 </div>
 <hr>
 {% for p in posts %}

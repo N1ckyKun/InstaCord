@@ -1,4 +1,11 @@
 /*Site*/
+div {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 body { 
     background-color: #222222; 
 }
@@ -10,21 +17,22 @@ h1 {
     color: white;
 }
 
-/*NavBar*/
-.nav { font-size:200%; }
-
-a.nav:link, a.nav:visited {
+a.button:link, a.button:visited {
     background-color: #333333;
     color: white;
     padding: 15px 25px;
+    margin: 2px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
 }
 
-a.nav:hover, a.nav:active {
+a.button:hover, a.button:active {
     background-color: #444444;
 }
+
+/*NavBar*/
+.nav { font-size:200%; }
 
 b.nav {
     background-color: #333333;
@@ -33,6 +41,7 @@ b.nav {
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    margin: 2px;
 }
 
 /*Logout*/
@@ -42,11 +51,8 @@ a.logout {
 
 /*Posts*/
 div.post {
-    margin: 0 auto;
-    display: flex;
     width: 600px;
     flex-direction: column;
-    align-items: center;
     background-color: #222222;
     padding:8px;
     border: 4px solid black;
@@ -88,11 +94,8 @@ a.acc {
 
 /*Profile Viewing*/
 div.profile {
-    margin: 0 auto;
-    display: flex;
     width: 600px;
     flex-direction: column;
-    align-items: center;
     background-color: #222222;
     padding:8px;
     color: white;
@@ -100,6 +103,11 @@ div.profile {
 
 b.profile {
     font-size: 400%;
+}
+
+div.profilebuttons {
+    padding:8px;
+    color: white;
 }
 
 /*Forms*/

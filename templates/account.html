@@ -1,9 +1,13 @@
 {% extends "base.html" %}
-{% block title %}{{info[0]}}'s profile{% endblock %}
+{% block title %}{{info[1]}}'s profile{% endblock %}
 {% block content %}
 <div class="profile">
-    <img src="{{info[1]}}" alt="avatar">
-    <b class="profile">{{info[0]}}</b>
+    <img src="{{info[4]}}" alt="avatar">
+    <b class="profile">{{info[1]}}</b>
+</div>
+<div class="profilebuttons">
+    <a style="color: red" class="button" href="">Report User</a>
+    <a class="button" href="">Follow User</a>
 </div>
 <hr>
 {% for p in posts %}

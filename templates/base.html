@@ -3,13 +3,14 @@
     <head>
         <title>{% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+        <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     </head>
     <body>
-        <b class="nav">InstaCord</b>
-        <a class="nav" href="/">Home</a>
-        <a class="nav" href="/account">Account</a>
-        <a class="nav" href="/post">Create Moment</a>
-        <a class="nav logout" href="/logout" >Logout</a><br>
+        <b class="button nav">InstaCord</b>
+        <a class="button nav" href="/">Home</a>
+        <a class="button nav" href="/account">Account</a>
+        <a class="button nav" href="/post">Create Moment</a>
+        <a class="button nav logout" href="/logout" >Logout</a><br>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for msg in messages %}
