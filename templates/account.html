@@ -12,6 +12,11 @@
 <hr>
 {% for p in posts %}
     <div class="post">
+        <div class="header">
+            <button id="{{p[4]}}" data-postid="{{p[4]}}" onclick="updateLike('{{p[4]}}')" type="button">
+                {{ "❤️" if p[6] else "🤍" }} {{p[5]}}
+            </button>
+        </div>
         <img class='post' src="{{p[0]}}" alt="{{p[1]}}">
         <p class="post">{{p[2]}}</p>
         <span class="post">created at {{p[3]}}</span>

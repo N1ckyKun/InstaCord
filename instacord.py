@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, session, flash, g
+from flask import Flask, redirect, url_for, render_template, request, session, flash, g,jsonify
 from datetime import timedelta
 import sqlite3, base64
 from db import (
@@ -11,7 +11,10 @@ from db import (
     get_user_info,
     get_posts_from_user,
     update_info,
-    delete_user
+    delete_user,
+    toggle_like,
+    check_likes,
+    delete_post
 )
 
 app = Flask(__name__)
@@ -74,7 +77,7 @@ def login():
 def home():
     if "user" in session:
         if it_exists(session['user'],"usr"):
-            posts = get_posts()
+            posts = get_posts(session['userid'])
             return render_template("index.html", posts = posts)
     return redirect(url_for("logout"))
 
@@ -89,7 +92,7 @@ def accsearch():
 def account(user):
     if it_exists(user,'usr'):
         user_info = get_user_info(user)
-        posts = get_posts_from_user(user_info[0])
+        posts = get_posts_from_user(user_info[0],session["userid"])
         if session["user"] == user:
             return render_template("self.html", info = user_info, posts = posts)
         return render_template("account.html", info = user_info, posts = posts)
@@ -119,6 +122,7 @@ def logout():
     if "user" in session:
         session.pop("user", None)
         session.pop("email", None)
+        session.pop("userid", None)
         flash("You have been logged out!", "info")
     return redirect(url_for("login"))
 
@@ -193,6 +197,21 @@ def delete():
         if it_exists(session['user'],'usr'):
             delete_user(session['user'])
     return redirect(url_for("logout"))
+
+@app.route("/like/<postid>", methods=["POST"])
+def like(postid):
+    if 'user' in session:
+        if it_exists(session['user'],'usr'):
+            toggle_like(postid,session['userid'])
+            count, liked = check_likes(postid, session["userid"])
+            return jsonify({"count": count, "liked": liked})
+    return redirect(url_for('home'))
+
+@app.route("/delete/<postid>", methods=["POST"])
+def deletepost(postid):
+    delete_post(postid)
+    return "", 204
+            
 
 if __name__ == "__main__":
     app.run(debug = True)

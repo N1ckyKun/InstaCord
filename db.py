@@ -61,7 +61,7 @@ def create_post(mmnt,capt,dscrpt,userid):
     cursor.execute(insch, (userid,capt,dscrpt,mmnt))
     db.commit()
 
-def get_posts():
+def get_posts(curuser):
     db = get_db()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM posts ORDER BY created_at DESC, id DESC")
@@ -73,7 +73,8 @@ def get_posts():
         result = cursor.fetchone()
         avtr = result[0]
         user = result[1]
-        post = [user,p[2],p[3],p[4],p[5],avtr]
+        likes = check_likes(p[0],curuser)
+        post = [user,p[2],p[3],p[4],p[5],avtr,p[0],likes[0],likes[1]]
         posts.append(post)
     print(posts)
     return posts
@@ -104,7 +105,7 @@ def get_user_info(user):
     print(info)
     return info
 
-def get_posts_from_user(userid):
+def get_posts_from_user(userid,curuser):
     db = get_db()
     cursor = db.cursor()
     pstsch = "SELECT * FROM posts WHERE userid = ? ORDER BY created_at DESC, id DESC"
@@ -112,7 +113,8 @@ def get_posts_from_user(userid):
     result = cursor.fetchall()
     posts = []
     for p in result:
-        post = [p[2],p[3],p[4],p[5]]
+        likes = check_likes(p[0],curuser)
+        post = [p[2],p[3],p[4],p[5],p[0],likes[0],likes[1]]
         posts.append(post)
     return posts
 
@@ -122,3 +124,35 @@ def delete_user(user):
     delsch = "DELETE FROM users WHERE username = ?"
     cursor.execute(delsch, (user,))
     db.commit()
+
+def delete_post(postid):
+    db = get_db()
+    cursor = db.cursor()
+    delsch = "DELETE FROM posts WHERE id = ?"
+    cursor.execute(delsch, (postid,))
+    db.commit()
+
+def toggle_like(postid,userid):
+    db = get_db()
+    cursor = db.cursor()
+    liksch = "SELECT 1 FROM likes WHERE userid = ? AND postid = ?"
+    cursor.execute(liksch, (userid,postid))
+    if cursor.fetchone():
+        liksch = "DELETE FROM likes WHERE userid = ? AND postid = ?"
+        
+    else:
+        liksch = "INSERT INTO likes (userid,postid) VALUES (?,?)"
+    cursor.execute(liksch,(userid,postid))
+    db.commit()
+
+def check_likes(postid, userid):
+    db = get_db()
+    cursor = db.cursor()
+    liksch = "SELECT COUNT(*) FROM likes WHERE postid = ?"
+    cursor.execute(liksch,(postid,))
+    count = cursor.fetchone()[0]
+    liksch = "SELECT 1 FROM likes WHERE postid = ? AND userid = ?"
+    cursor.execute(liksch,(postid,userid))
+    if cursor.fetchone():
+        return count, 1
+    return count, 0
