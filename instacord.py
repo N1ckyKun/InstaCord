@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash, g
 from datetime import timedelta
-from db import init_db, insert_user, it_exists, compare_pswd, create_post, get_posts, change_avatar, get_user_info
+from db import init_db, insert_user, it_exists, compare_pswd, create_post, get_posts, change_avatar, get_user_info, get_posts_from_user
 import sqlite3, base64
 
 app = Flask(__name__)
@@ -93,7 +93,8 @@ def accsearch():
 def account(user):
     if it_exists(user,'usr'):
         user_info = get_user_info(user)
-        return render_template("account.html", info = user_info)
+        posts = get_posts_from_user(user)
+        return render_template("account.html", info = user_info, posts = posts)
     else: 
         return "<h1> User Doesn't Exist!<h2>"
 

@@ -86,6 +86,22 @@ a.acc {
     gap: 6px;
 }
 
+/*Profile Viewing*/
+div.profile {
+    margin: 0 auto;
+    display: flex;
+    width: 600px;
+    flex-direction: column;
+    align-items: center;
+    background-color: #222222;
+    padding:8px;
+}
+
+h1.profile {
+    font-size: 400%;
+    line-height: .7;
+}
+
 /*Forms*/
 div.forms {
     margin: 0 auto;

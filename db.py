@@ -88,3 +88,15 @@ def get_user_info(user):
     info.append(result[4])
     print(info)
     return info
+
+def get_posts_from_user(user):
+    db = get_db()
+    cursor = db.cursor()
+    pstsch = "SELECT * FROM posts WHERE userid = ?"
+    cursor.execute(pstsch, (user,))
+    result = cursor.fetchall()
+    posts = []
+    for p in result:
+        post = [p[2],p[3],p[4],p[5]]
+        posts.append(post)
+    return posts

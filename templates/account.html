@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 {% block title %}{{info[0]}}'s profile{% endblock %}
 {% block content %}
-<img src="{{info[1]}}" alt="avatar">
-<h1>{{info[0]}}</h1>
+<div class="profile">
+    <img src="{{info[1]}}" alt="avatar">
+    <h1 class="profile">{{info[0]}}</h1>
+</div>
+<hr>
+{% for p in posts %}
+    <div class="post">
+        <img class='post' src="{{p[0]}}" alt="{{p[1]}}">
+        <p class="post">{{p[2]}}</p>
+    </div>
+{% endfor %}
 {% endblock %}
