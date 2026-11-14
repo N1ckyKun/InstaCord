@@ -1,0 +1,97 @@
+/*Site*/
+body { 
+    background-color: #222222; 
+}
+
+p { color: white; }
+
+h1 {
+    text-align: center;
+    color: white;
+}
+
+/*NavBar*/
+.nav { font-size:200%; }
+
+a.nav:link, a.nav:visited {
+    background-color: #333333;
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+a.nav:hover, a.nav:active {
+    background-color: #444444;
+}
+
+b.nav {
+    background-color: #333333;
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/*Logout*/
+a.logout {
+    float: right;
+}
+
+/*Posts*/
+div.post {
+    margin: 0 auto;
+    display: flex;
+    width: 600px;
+    flex-direction: column;
+    align-items: center;
+    background-color: #222222;
+    padding:8px;
+    border: 4px solid black;
+    margin-bottom: 20px;
+}
+
+img.post {
+    border: 2px solid #333333;
+    height: auto;
+    width: 600px;
+}
+
+p.post {
+    align-self: flex-start;
+}
+
+/*Account*/
+a.acc:link,a.acc:visited {
+    font-size:300%;
+    color: white;
+    text-decoration: none;
+}
+
+a.acc:hover, a.acc:active {
+    opacity: .7;
+}
+
+img.acc {
+    width: 1em;
+    height: auto;
+}
+
+a.acc {
+    text-decoration: none;
+    display:flex; 
+    align-items: center;
+    gap: 6px;
+}
+
+/*Forms*/
+div.forms {
+    margin: 0 auto;
+    display: flex;
+    width: 600px;
+    flex-direction: column;
+    align-items: center;
+    background-color: #222222;
+}
