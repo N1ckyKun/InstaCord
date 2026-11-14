@@ -15,8 +15,11 @@ def init_db():
 def insert_user(user,email,pswd):
     db = get_db()
     cursor = db.cursor()
+    with open('static/defavt.png', 'rb') as file:
+            encd_bytes = base64.b64encode(file.read()).decode('utf-8')
+            data_uri = f"data:image/png;base64,{encd_bytes}" 
     insch = "INSERT INTO users (username, email, pswd, avatar) VALUES (?,?,?,?)"
-    cursor.execute(insch, (user,email,pswd,'123'))
+    cursor.execute(insch, (user,email,pswd,data_uri))
     db.commit()
 
 def it_exists(input, type):
@@ -59,16 +62,29 @@ def get_posts():
     cursor.execute("SELECT * FROM posts")
     result = cursor.fetchall()
     posts = []
-    with open('static/defavt.png', 'rb') as file:
-        encd_bytes = base64.b64encode(file.read()).decode('utf-8')
-        data_uri = f"data:image/png;base64,{encd_bytes}" 
     for p in result:
         avtsch = "SELECT avatar FROM users WHERE username = ?"
         cursor.execute(avtsch,(p[1],))
         avtr = cursor.fetchone()[0]
-        if avtr == '123':
-            avtr = data_uri
-            print(data_uri)
         post = [p[1],p[2],p[3],p[4],p[5],avtr]
         posts.append(post)
     return posts
+
+def change_avatar(data_uri, user):
+    db = get_db()
+    cursor = db.cursor()
+    upsch = "UPDATE users SET avatar = ? WHERE username = ?"
+    cursor.execute(upsch, (data_uri, user))
+    db.commit()
+
+def get_user_info(user):
+    db = get_db()
+    cursor = db.cursor()
+    usrsch = "SELECT * FROM users WHERE username = ?"
+    cursor.execute(usrsch, (user,))
+    result = cursor.fetchone()
+    info = []
+    info.append(result[1])
+    info.append(result[4])
+    print(info)
+    return info

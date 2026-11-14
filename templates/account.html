@@ -1,12 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Home Page{% endblock %}
+{% block title %}{{info[0]}}'s profile{% endblock %}
 {% block content %}
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for msg in messages %}
-            <p>{{msg}}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-<h1>Viewing {{user}}'s Account</h1>
+<img src="{{info[1]}}" alt="avatar">
+<h1>{{info[0]}}</h1>
 {% endblock %}

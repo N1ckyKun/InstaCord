@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash, g
 from datetime import timedelta
-from db import init_db, insert_user, it_exists, compare_pswd, create_post, get_posts
+from db import init_db, insert_user, it_exists, compare_pswd, create_post, get_posts, change_avatar, get_user_info
 import sqlite3, base64
 
 app = Flask(__name__)
@@ -31,8 +31,26 @@ def register():
             insert_user(usr,eml,pswd)
             session.permanent = True
             session["user"] = usr
-            flash("Register Succesful!", "info")
+            flash("Register Succesful! You can also change your avatar!", "info")
+            return redirect(url_for("avatar"))
+
+
+@app.route("/avatar", methods=["POST","GET"])
+def avatar():
+    if request.method == "GET":
+        if "user" in session:
+            if it_exists(session['user'],'usr'):
+                return render_template("avatar.html")
+            return redirect(url_for("logout"))
+    else:
+        avatar = request.files["avatar"]
+        if avatar and avatar.filename != '':
+            encd_bytes = base64.b64encode(avatar.read()).decode('utf-8')
+            data_uri = f"data:{avatar.mimetype};base64,{encd_bytes}"
+        user = session["user"]
+        change_avatar(data_uri,user)
         return redirect(url_for("home"))
+        
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -67,14 +85,15 @@ def home():
 @app.route("/account")
 def accsearch():
     if "user" in session:
-        return redirect(url_for("account", usr = session["user"]))
+        return redirect(url_for("account", user = session["user"]))
     else:
         return redirect(url_for("login"))
 
-@app.route("/account/<usr>")
-def account(usr):
-    if it_exists(usr,'usr'):
-        return render_template("account.html", user = usr)
+@app.route("/account/<user>")
+def account(user):
+    if it_exists(user,'usr'):
+        user_info = get_user_info(user)
+        return render_template("account.html", info = user_info)
     else: 
         return "<h1> User Doesn't Exist!<h2>"
 
@@ -96,8 +115,8 @@ def post():
         create_post(data_uri,capt,dscrpt,usr)
         return redirect(url_for("home"))
 
-@app.route("/loggedout")
-def loggedout():
+@app.route("/logout")
+def logout():
     if "user" in session:
         session.pop("user", None)
         session.pop("email", None)
