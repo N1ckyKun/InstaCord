@@ -94,6 +94,8 @@ def account(user):
     if it_exists(user,'usr'):
         user_info = get_user_info(user)
         posts = get_posts_from_user(user)
+        if session["user"] == user:
+            return render_template("self.html", info = user_info, posts = posts)
         return render_template("account.html", info = user_info, posts = posts)
     else: 
         return "<h1> User Doesn't Exist!<h2>"

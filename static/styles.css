@@ -95,11 +95,11 @@ div.profile {
     align-items: center;
     background-color: #222222;
     padding:8px;
+    color: white;
 }
 
-h1.profile {
+b.profile {
     font-size: 400%;
-    line-height: .7;
 }
 
 /*Forms*/
