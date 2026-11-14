@@ -23,12 +23,14 @@ a.button:link, a.button:visited {
     color: white;
     padding: 15px 25px;
     margin: 2px;
+    border-radius: 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
 }
 
 a.button:hover, a.button:active {
+    border-radius: 10px;
     background-color: #444444;
 }
 
@@ -54,16 +56,18 @@ a.logout {
 div.post {
     width: 600px;
     flex-direction: column;
-    background-color: #222222;
+    background-color: #111111;
     padding:8px;
-    border: 4px solid black;
+    border: 4px solid #333333;
     margin-bottom: 20px;
+    border-radius: 20px;
 }
 
 img.post {
-    border: 2px solid #333333;
+    border: 4px solid #333333;
     height: auto;
     width: 600px;
+    border-radius: 20px;
 }
 
 p.post {
@@ -101,8 +105,11 @@ a.acc {
     text-decoration: none;
     display:flex; 
     align-items: center;
+    align-self: flex-start;
+    margin: 10px;
     gap: 6px;
 }
+
 
 /*Profile Viewing*/
 div.profile {
@@ -175,4 +182,5 @@ img.avatar {
     width: 70px;
     object-fit: cover;
     border-radius: 100%;
+    border: 4px solid #222222;
 }
