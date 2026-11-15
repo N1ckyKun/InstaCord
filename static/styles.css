@@ -1,21 +1,54 @@
 /*Site*/
-div {
-    margin: 0 auto;
-    display: flex;
+div { display: flex }
+div.body{
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    background-color: #050505;
 }
 
-body { 
-    background-color: #050505; 
+body {
+    background-color: #050505
 }
 
-p { color: white; }
+span, p { color: white; }
+hr { width: 100%; }
 
 h1 {
-    text-align: center;
     color: white;
     font-size: 400%;
+}
+
+/*Avatars*/
+img.avatar {
+    width: 600px;
+    height: 600px;
+    border: 5% solid #DDDDDD;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+img.tinyavatar {
+    width: 30px;
+    height: 30px;
+    border: 5% solid #DDDDDD;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+/*Buttons*/
+button {
+    border-radius: 10px;
+    border: none; 
+    color: white; 
+    background-color: #111111;
+    font-size: 200%; 
+    cursor: pointer; 
+    margin: 0px 5px;
+}
+
+button:hover {
+    background-color: #222222;
+    color: #bbbbbb;
 }
 
 a.button:link, a.button:visited {
@@ -35,7 +68,11 @@ a.button:hover, a.button:active {
 }
 
 /*NavBar*/
-.nav { font-size:200%; }
+.nav { font-size:150%; }
+
+div.nav {
+    display:flex;
+}
 
 b.nav {
     background-color: #333333;
@@ -47,89 +84,146 @@ b.nav {
     margin: 2px;
 }
 
-/*Logout*/
-a.logout {
-    float: right;
+/*Posts*/
+div.post {
+    width: 600px;
+    flex-direction: column;
+    align-items: center;
+    background-color: #111111;
+    padding:8px;
+    border: 4px solid #333333;
+    margin-bottom: 10px;
+    border-radius: 20px;
 }
 
-/*Posts*/
-button.post {
-    border-radius: 10px;
-    background: none; 
-    border: none; 
-    color: white; 
-    font-size: 200%; 
-    cursor: pointer; 
+div.postheader {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+a.poster {
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    margin: 10px;
+    gap: 6px;
+}
+
+a.poster:hover {
+    color: #333333;
+    opacity: 75%;
+}
+
+img.smallavatar {
+    width: 55px;
+    height: 55px;
+    border: 5% solid #DDDDDD;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+span.poster {
+    color: white;
+    font-size: 250%;
+}
+
+button.like {
     padding-right: 10px;
     padding-bottom: 5px;
     margin-right: 10px;
     margin-bottom: 5px;
 }
 
-button.post:hover {
-    background-color: #333333;
-    opacity: 75%;
-}
-
-span.like {
-    color: white;
-}
-
-span.likebutton {
-    display:flex;
-    align-items: center;
-    gap: 6px;
-    margin-right: 10px;
-    padding-right: 20px;
-    background-color: #333333;
-    border: 4px solid #222222;
-    border-radius: 15px;
-}
-
-a.acc {
-    text-decoration: none;
-    display:flex; 
-    align-items: center;
-    align-self: flex-start;
-    margin: 10px;
-    gap: 6px;
-}
-
-div.header {
-    width: 100%;
-    justify-content: space-between;
-}
-
-div.post {
-    width: 600px;
-    flex-direction: column;
-    background-color: #111111;
-    padding:8px;
-    border: 4px solid #333333;
-    margin-bottom: 20px;
-    border-radius: 20px;
-}
-
 img.post {
-    border: 4px solid #333333;
+    width: 95%;
+    max-height: 800px;
+    border: 5px solid #333333;
     height: auto;
-    width: 600px;
+    object-fit: cover;
     border-radius: 20px;
 }
 
-p.post {
+p.caption {
+    font-size: 120%;
     align-self: flex-start;
     overflow-wrap: anywhere;
+    padding-left: 20px;
+    padding-right: 20px;
     max-width: 100%;
 }
 
-span.post {
+p.date {
+    font-size: 80%;
     align-self: flex-end;
-    color: white;
-    opacity: 50%;
+    padding-right: 10px;
+    opacity: 70%;
 }
 
-/*Account*/
+div.commentbuttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+button.comm:hover {
+    background-color: #111111;
+}
+
+/*Viewing Comments*/
+div.comment {
+    margin: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+div.comheader {
+    margin-left: 5px;
+    align-self: flex-start;
+}
+
+a.commenter {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 3px;
+}
+
+a.commenter:hover {
+    color: #333333;
+    opacity: 75%;
+}
+
+
+span.commenter {
+    font-size: 110%;
+}
+
+span.comment {
+    padding-left: 20px;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    width: 97%;
+    justify-content: space-between;
+}
+
+span.date {
+    font-size: 70%;
+    opacity: 70%;
+}
+
+/*Commenting*/
+form.comment {
+    width: 100%;
+}
+
+input.comment {
+    border-radius: 10px;
+}
+
+/*Profile Viewing*/
 a.acc:link,a.acc:visited {
     font-size:300%;
     color: white;
@@ -148,21 +242,10 @@ img.acc {
     border: 5px solid #ffffff;
 }
 
-img.moment {
-    width: 600px;
-    height: auto;
-    max-height: 800px;
-    object-fit: cover;
-    border: 5px solid #ffffff;
-}
-
-
-/*Profile Viewing*/
-button.profile {
-    background: none; 
-    border: none; 
-    color: white;
+button.profile { 
+    font-size: 100%; 
     cursor: pointer; 
+    color: white;
     padding: 17px 27px;
     margin: 2px;
     border-radius: 10px;
@@ -179,8 +262,11 @@ button.profile:hover {
 div.profile {
     width: 600px;
     flex-direction: column;
+    justify-content: center;
     padding:8px;
     color: white;
+    display: flex;
+    align-items: center;
 }
 
 b.profile {
@@ -238,13 +324,4 @@ div.forms {
     align-items: center;
     color: white;
     border-radius: 10%;
-}
-
-/*Avatar*/
-img.avatar {
-    height: 70px;
-    width: 70px;
-    object-fit: cover;
-    border-radius: 100%;
-    border: 4px solid #222222;
 }

@@ -31,3 +31,51 @@ async function followUser(userid) {
         button.textContent = `${data.followed ? 'Following' : 'Follow User'}`;
     }
 }
+
+async function postComment(postid) {
+    const input = document.getElementById(`input${postid}`);
+    const response = await fetch(`/comment/${postid}`,{
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ comment: input.value.trim() })
+    });
+    if(response.ok) {
+        window.location.reload();
+    }
+}
+
+async function togglePost(postid) {
+    const bview = document.getElementById(`BView${postid}`);
+    const bcomm = document.getElementById(`BComm${postid}`);
+    const view = document.getElementById(`View${postid}`);
+    const comm = document.getElementById(`Comm${postid}`);
+    if (comm.style.display == "flex") {
+            comm.style.display = "none";
+            bcomm.style.backgroundColor = '#111111';
+    }
+    else {
+        comm.style.display = "flex";
+        bcomm.style.backgroundColor = '#222222';
+        view.style.display = "none";
+        bview.style.backgroundColor = '#111111';
+    }
+}
+
+async function toggleView(postid) {
+    const bview = document.getElementById(`BView${postid}`);
+    const bcomm = document.getElementById(`BComm${postid}`);
+    const view = document.getElementById(`View${postid}`);
+    const comm = document.getElementById(`Comm${postid}`);
+    if (view.style.display == "flex") {
+        view.style.display = "none";
+        bview.style.backgroundColor = '#111111';
+    }
+    else {
+        view.style.display = "flex";
+        bview.style.backgroundColor = '#222222';
+        comm.style.display = "none";
+        bcomm.style.backgroundColor = '#111111';
+    }
+}

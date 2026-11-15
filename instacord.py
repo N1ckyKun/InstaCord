@@ -17,7 +17,8 @@ from db import (
     check_follows,
     delete_post,
     identify,
-    postid_to_userid
+    postid_to_userid,
+    comment_on_post
 )
 
 app = Flask(__name__)
@@ -64,7 +65,7 @@ def login():
         user = request.form["nm"]
         password = request.form["pswd"]
         if exists(user,'user'):
-            if isCorrect(user, password):
+            if isCorrect(identify(user), password):
                 log_in(identify(user))
                 flash("Login Succesful!", "info")
                 return redirect(url_for("home"))
@@ -194,14 +195,14 @@ def username():
 
 @app.route("/delete")
 def delete():
-    if 'user' in session:
+    if 'userid' in session:
         if exists(session['user'],'user'):
             delete_user(session['userid'])
     return redirect(url_for("logout"))
 
 @app.route("/like/<postid>", methods=["POST"])
 def like(postid):
-    if 'user' in session:
+    if 'userid' in session:
         toggle_like(postid,session['userid'])
         count, liked = check_likes(postid, session["userid"])
         return jsonify({"count": count, "liked": liked})
@@ -209,7 +210,7 @@ def like(postid):
 
 @app.route("/follow/<userid>", methods=["POST"])
 def follow(userid):
-    if 'user' in session:
+    if 'userid' in session:
         toggle_follow(userid,session['userid'])
         count, followed = check_follows(userid, session["userid"])
         return jsonify({"count": count, "followed": followed})
@@ -220,8 +221,18 @@ def deletepost(postid):
     if "userid" in session:
         if session["userid"] == postid_to_userid(postid):
             delete_post(postid)
-            return "", 204
+            return jsonify({"error": "Unauthorized"}), 204
     return
+
+@app.route("/comment/<postid>", methods=["POST"])
+def comment(postid):
+    if "userid" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json()
+    contents = data.get("comment", "").strip()
+    commentid = comment_on_post(postid, session['userid'], contents)
+    return jsonify({"commentid": commentid})
+
 
 if __name__ == "__main__":
     app.run(debug = True)

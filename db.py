@@ -69,7 +69,24 @@ def get_posts(userid, curuser):
         likes = check_likes(p[0],curuser)
         post = [p[0],user,avtr,p[2],p[3],p[4],likes[0],likes[1]]
         posts.append(post)
+    for post in posts:
+        sch = "SELECT COUNT(*) FROM commentss WHERE postid = ?"
+        cursor.execute(sch,(post[0],))
+        count = cursor.fetchone()[0]
+        postcomments = []
+        sch = "SELECT * FROM commentss WHERE postid = ? ORDER BY created_at DESC"
+        cursor.execute(sch,(post[0],))
+        result = cursor.fetchall()
+        for comdata in result:
+            info = get_user_info(comdata[1],comdata[1])
+            user = info[1]
+            avatar = info[4]
+            comment = [user,avatar,comdata[3],comdata[4]]
+            postcomments.append(comment)
+        post.append(postcomments)
+        post.append(count)
     return posts
+
 
 def update_info(userid, new, parameter):
     db = get_db()
@@ -168,7 +185,7 @@ def identify(username):
     idsch = "SELECT id FROM users WHERE username = ?"
     cursor.execute(idsch,(username,))
     result = cursor.fetchone()
-    return result[0]
+    return result[0]  
 
 def postid_to_userid(postid):
     db = get_db()
@@ -177,3 +194,10 @@ def postid_to_userid(postid):
     cursor.execute(idsch,(postid,))
     result = cursor.fetchone()
     return result[0]
+
+def comment_on_post(postid, userid, c):
+    db = get_db()
+    cursor = db.cursor()
+    insch = "INSERT INTO commentss (postid, userid, contents) VALUES (?,?,?)"
+    cursor.execute(insch, (postid,userid,c))
+    db.commit()

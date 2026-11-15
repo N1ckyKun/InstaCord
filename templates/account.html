@@ -15,14 +15,46 @@
 <hr>
 {% for p in posts %}
     <div class="post">
-        <div class="header">
-            <button class="post" id="{{p[0]}}" onclick="updateLike('{{p[0]}}')" type="button">
+        <div class="postheader">
+            <button class="like" id="{{p[0]}}" data-postid="{{p[0]}}" onclick="updateLike('{{p[0]}}')" type="button">
                 {{ "❤️" if p[7] else "🤍" }} {{p[6]}}
             </button>
         </div>
         <img class='post' src="{{p[3]}}" alt="Moment">
-        <p class="post">{{p[4]}}</p>
-        <span class="post">created at {{p[5]}}</span>
+        <p class="caption">{{p[4]}}</p>
+        <p class="date">created at {{p[5]}}</p><hr style="width: 100%;">
+        <div class="commentbuttons">
+            <button id="BComm{{p[0]}}" onclick="togglePost('{{p[0]}}')" type="button" class="comm">
+                Post Comment
+            </button>
+            <button id="BView{{p[0]}}" onclick="toggleView('{{p[0]}}')" type="button" class="comm">
+                View Comments
+            </button>
+        </div>
     </div>
+    <div id="View{{p[0]}}" class="post" style="display: none">
+        {% for c in p[8] %}
+            <div class="comment">
+                <div class="comheader">
+                    <a class = 'commenter' href="/account/{{c[0]}}">
+                        <img class='tinyavatar' src="{{c[1]}}" alt="pfp">
+                        <span class="commenter"><b>{{c[0]}}</b></span>
+                    </a>
+                </div>
+                <span class="comment">
+                    <span>{{c[2]}}</span>
+                    <span class="date">created at {{c[3]}}</span>
+                </span>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+    <div id="Comm{{p[0]}}" class="post" style="display: none">
+        <form class="comment" method="post">
+            <input id="input{{p[0]}}" class="comment" type="text" name="username" required/><br>
+            <button class="comment" onclick="postComment('{{p[0]}}')" type="button">Comment</button>
+        </form>
+    </div>
+<br> 
 {% endfor %}
 {% endblock %}

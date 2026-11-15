@@ -7,19 +7,23 @@
         <script src="{{url_for('static', filename='app.js')}}" defer></script>
     </head>
     <body>
-        <b class="button nav">InstaCord</b>
-        <a class="button nav" href="/">Home</a>
-        <a class="button nav" href="/account">Account</a>
-        <a class="button nav" href="/post">Create Moment</a>
-        <a class="button nav logout" href="/logout" >Logout</a><br>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for msg in messages %}
-                    <p>{{msg}}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {% block content %}
-        {% endblock %}
+        <div class="nav">
+            <b class="button nav">InstaCord</b>
+            <a class="button nav" href="/">Home</a>
+            <a class="button nav" href="/account">Account</a>
+            <a class="button nav" href="/post">Create Moment</a>
+            <a class="button nav" href="/logout" style="float:right">Logout</a><br>
+        </div>
+        <div class="body">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for msg in messages %}
+                        <p>{{msg}}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}
+            {% endblock %}
+        </div>
     </body>
 </html>
