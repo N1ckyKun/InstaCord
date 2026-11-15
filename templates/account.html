@@ -4,22 +4,25 @@
 <div class="profile">
     <img class='acc' src="{{info[4]}}" alt="avatar">
     <b class="profile">{{info[1]}}</b>
+    <span id="count{{info[0]}}">{{info[5]}} Followers</span>
 </div>
 <div class="profilebuttons">
     <a style="color: red" class="button" href="">Report User</a>
-    <a class="button" href="">Follow User</a>
+    <button id="button{{info[0]}}" class="profile" onclick="followUser('{{info[0]}}')">
+        {{ "Following" if info[6] else "Follow User" }}
+    </button>
 </div>
 <hr>
 {% for p in posts %}
     <div class="post">
         <div class="header">
-            <button id="{{p[4]}}" data-postid="{{p[4]}}" onclick="updateLike('{{p[4]}}')" type="button">
-                {{ "❤️" if p[6] else "🤍" }} {{p[5]}}
+            <button class="post" id="{{p[0]}}" onclick="updateLike('{{p[0]}}')" type="button">
+                {{ "❤️" if p[7] else "🤍" }} {{p[6]}}
             </button>
         </div>
-        <img class='post' src="{{p[0]}}" alt="{{p[1]}}">
-        <p class="post">{{p[2]}}</p>
-        <span class="post">created at {{p[3]}}</span>
+        <img class='post' src="{{p[3]}}" alt="Moment">
+        <p class="post">{{p[4]}}</p>
+        <span class="post">created at {{p[5]}}</span>
     </div>
 {% endfor %}
 {% endblock %}

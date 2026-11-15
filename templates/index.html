@@ -5,17 +5,17 @@
 {% for p in posts %}
     <div class="post">
         <div class="header">
-            <a class = 'acc' href="/account/{{p[0]}}">
-                <img class='avatar' src="{{p[5]}}" alt="pfp">
-                <span class="acc">{{p[0]}}</span>
+            <a class = 'acc' href="/account/{{p[1]}}">
+                <img class='avatar' src="{{p[2]}}" alt="pfp">
+                <span class="acc">{{p[1]}}</span>
             </a>
-            <button id="{{p[6]}}" data-postid="{{p[6]}}" onclick="updateLike('{{p[6]}}')" type="button">
-                {{ "❤️" if p[8] else "🤍" }} {{p[7]}}
+            <button class="post" id="{{p[0]}}" data-postid="{{p[0]}}" onclick="updateLike('{{p[0]}}')" type="button">
+                {{ "❤️" if p[7] else "🤍" }} {{p[6]}}
             </button>
         </div>
-        <img class='post' src="{{p[1]}}" alt="{{p[2]}}">
-        <p class="post">{{p[3]}}</p>
-        <span class="post">created at {{p[4]}}</span>
+        <img class='post' src="{{p[3]}}" alt="Moment">
+        <p class="post">{{p[4]}}</p>
+        <span class="post">created at {{p[5]}}</span>
     </div>
 {% endfor %}
 {% endblock %}

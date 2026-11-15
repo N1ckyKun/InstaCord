@@ -6,13 +6,27 @@
         <h2>Create Moment</h2>
         <form action="#" method="post" enctype="multipart/form-data">
             <h3>Upload your Moment</h3>
-            <input type="file" name="moment" accept="image/png" required/><br>
-            <h3>Describe your Moment</h3>
-            <input type="text" name="description"/><br>
+            <input id="moment" type="file" name="moment" onchange='update_preview()' accept="image/png" required/><br>
+            <img class='moment' style='display: none;' id='preview' src="" alt="pfp">
             <h3>Caption</h3>
             <input type="text" name="caption" required/><br><br>
             <input type="submit" value="submit"/><br><br>
         </form>
     </div>
+    <script>
+        function update_preview() {
+            const input = document.getElementById('moment');
+            const preview = document.getElementById('preview');
+            const file = input.files[0]; 
+        
+            if (file) {
+                preview.src = URL.createObjectURL(file); 
+                preview.style.display = 'block';
+            } else {
+                preview.src = '#';
+                preview.style.display = 'none';
+            }
+        }
+    </script>
 </div>
 {% endblock %}

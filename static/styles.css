@@ -6,8 +6,6 @@ div {
     justify-content: center;
 }
 
-
-
 body { 
     background-color: #050505; 
 }
@@ -55,7 +53,7 @@ a.logout {
 }
 
 /*Posts*/
-button {
+button.post {
     border-radius: 10px;
     background: none; 
     border: none; 
@@ -68,7 +66,7 @@ button {
     margin-bottom: 5px;
 }
 
-button:hover {
+button.post:hover {
     background-color: #333333;
     opacity: 75%;
 }
@@ -150,10 +148,34 @@ img.acc {
     border: 5px solid #ffffff;
 }
 
-
+img.moment {
+    width: 600px;
+    height: auto;
+    max-height: 800px;
+    object-fit: cover;
+    border: 5px solid #ffffff;
+}
 
 
 /*Profile Viewing*/
+button.profile {
+    background: none; 
+    border: none; 
+    color: white;
+    cursor: pointer; 
+    padding: 17px 27px;
+    margin: 2px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #333333;
+    border-radius: 10px;
+}
+
+button.profile:hover {
+    border-radius: 10px;
+    background-color: #444444;
+}
+
 div.profile {
     width: 600px;
     flex-direction: column;

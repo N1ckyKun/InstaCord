@@ -18,3 +18,16 @@ async function deletePost(postid) {
         post.remove();
     }
 }
+
+async function followUser(userid) {
+    const button = document.getElementById(`button${userid}`);
+    const count = document.getElementById(`count${userid}`);
+    const response = await fetch(`/follow/${userid}`,{
+        method: 'POST'
+    });
+    if(response.ok) {
+        const data = await response.json();
+        count.textContent =  `${data.count} Followers`;
+        button.textContent = `${data.followed ? 'Following' : 'Follow User'}`;
+    }
+}
