@@ -79,3 +79,27 @@ async function toggleView(postid) {
         bcomm.style.backgroundColor = '#111111';
     }
 }
+
+async function deleteUser(userid) {
+    const user = document.getElementById(`user${userid}`);
+    const response = await fetch(`/deleteuser/${userid}`,{
+        method: 'POST'
+    });
+    if (response.ok) {
+        user.remove();
+    }
+}
+
+async function adminUser(userid) {
+    const button = document.getElementById(`admin${userid}`);
+    const tag = document.getElementById(`tag${userid}`);
+    const response = await fetch(`/adminuser/${userid}`,{
+        method: 'POST'
+    });
+    if (response.ok) {
+        const data = await response.json();
+        button.textContent = `${data.admin ? 'Unadmin' : 'Admin'}`;
+        tag.style.backgroundColor = data.color;
+        tag.textContent = data.name;
+    }
+}

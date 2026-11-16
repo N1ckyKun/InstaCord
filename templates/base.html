@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{% block title %}{% endblock %}</title>
+        <title>Instacord | {% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
         <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
         <script src="{{url_for('static', filename='app.js')}}" defer></script>
     </head>
     <body>
         <div class="nav">
-            <b class="button nav">InstaCord</b>
-            <a class="button nav" href="/">Home</a>
-            <a class="button nav" href="/account">Account</a>
-            <a class="button nav" href="/post">Create Moment</a>
-            <a class="button nav" href="/logout" style="float:right">Logout</a><br>
+            <a class='button topleft' href="/account/{{selfdata()[0]}}">
+                <img class='smallavatar' src="{{selfdata()[1]}}" alt="pfp">
+                <span>{{selfdata()[0]}}</span>
+            </a>
+            <a class="button" href="/">Home</a>
+            <a class="button" href="/post">Create Moment</a>
+            <a class="button" href="/userlist">Users</a><br>
+            <a class="button" href="/logout">Logout</a><br>
         </div>
-        <div class="body">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for msg in messages %}
-                        <p>{{msg}}</p>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            {% block content %}
-            {% endblock %}
+        <div class="vignette">
+            <div class="body">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
     </body>
 </html>

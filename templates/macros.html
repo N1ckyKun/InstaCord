@@ -1,0 +1,62 @@
+{% macro user_badge(user_info, size='small') %}
+    <a class="poster" href="/account/{{ user_info[0] }}">
+        <img class="{{ size }}avatar" src="{{ user_info[1] }}" alt="pfp">
+        <span class="poster">{{ user_info[0] }}</span>
+        <span id="tag{{user_info[3]}}" class="tag" style="background-color: {{ user_info[2][1] }}; font-size: 100%; margin-bottom: 0;">
+            {{ user_info[2][0] }}
+        </span>
+    </a>
+{% endmacro %}
+
+{% macro render_post(p, showuser = "false", showdelete = "true") %}
+    <div id="post{{p[0][0]}}" class="post">
+        <div class="postheader">
+            {% if showdelete %}
+                <button style="color: red" class="delete" data-postid="{{p[0][0]}}" onclick="deletePost('{{p[0][0]}}')" type="button">
+                    &#128939
+                </button>
+            {% endif %}
+            {% if showuser %}
+                {{ user_badge(p[1], 'small') }}
+            {% endif %}
+            <button class="like" id="{{p[0][0]}}" data-postid="{{p[0][0]}}" onclick="updateLike('{{p[0][0]}}')" type="button">
+                {{ "❤️" if p[2][1] else "🤍" }} {{p[2][0]}}
+            </button>
+        </div>
+        <img class='post' src="{{p[0][2]}}" alt="Moment">
+        <p class="caption">{{p[0][3]}}</p>
+        <p class="date">created at {{p[0][4]}}</p><hr style="width: 100%;">
+        <div class="commentbuttons">
+            <button id="BComm{{p[0][0]}}" onclick="togglePost('{{p[0][0]}}')" type="button" class="comm">
+                Post Comment
+            </button>
+            <button id="BView{{p[0][0]}}" onclick="toggleView('{{p[0][0]}}')" type="button" class="comm">
+                View Comments
+            </button>
+        </div>
+    </div>
+    <div id="View{{p[0][0]}}" class="post" style="display: none">
+        {% for c in p[3][0] %}
+            <div class="comment">
+                <div class="comheader">
+                    <a class = 'commenter' href="/account/{{c[1][0]}}">
+                        <img class='tinyavatar' src="{{c[1][1]}}" alt="pfp">
+                        <span class="commenter"><b>{{c[1][0]}}</b></span>
+                    </a>
+                </div>
+                <span class="comment">
+                    <span>{{c[0][3]}}</span>
+                    <span class="date">created at {{c[0][4]}}</span>
+                </span>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+    <div id="Comm{{p[0][0]}}" class="post" style="display: none">
+        <form class="comment" method="post">
+            <input id="input{{p[0][0]}}" class="comment" type="text" name="username" required/><br>
+            <button class="comment" onclick="postComment('{{p[0][0]}}')" type="button">Comment</button>
+        </form>
+    </div>
+<br> 
+{% endmacro %}

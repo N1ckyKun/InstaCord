@@ -36,3 +36,6 @@ CREATE TABLE IF NOT EXISTS commentss (
     contents TEXT NOT NULL,
     created_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT OR IGNORE INTO users (id, username, email, pswd, isadmin)
+VALUES (0, 'm4ddie', 'nikolaskastrinakis@gmail.com', '123', 1);

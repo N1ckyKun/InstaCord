@@ -1,6 +1,7 @@
 import sqlite3, base64, mimetypes
 from flask import g, url_for 
 
+#database
 def get_db():
     if "db" not in g:
         g.db = sqlite3.connect("insta.db")
@@ -13,6 +14,7 @@ def init_db():
     schema = open("schema.sql")
     db.executescript(schema.read())
 
+#checks
 def exists(input, type):
     db = get_db()
     cursor = db.cursor()
@@ -33,6 +35,7 @@ def isCorrect(userid,pswd):
     result = cursor.fetchone()
     return result[0] == pswd
 
+#create
 def create_user(user,email,pswd):
     db = get_db()
     cursor = db.cursor()
@@ -50,44 +53,52 @@ def create_post(mmnt,capt,userid):
     cursor.execute(insch, (userid,capt,mmnt))
     db.commit()
 
+#comment lookup
+def get_post_comment_info(postid):
+    comments = []
+    db = get_db()
+    cursor = db.cursor()
+    sch = "SELECT * FROM commentss WHERE postid = ? ORDER BY created_at DESC"
+    cursor.execute(sch,(postid,))
+    dbcommentinfo = cursor.fetchall()
+    for c in dbcommentinfo:
+        userinfo = get_short_user_info(c[1])
+        comment = [c,userinfo]
+        comments.append(comment)
+    return comments
+
+def get_post_comment_count(postid):
+    db = get_db()
+    cursor = db.cursor()
+    sch = "SELECT COUNT(*) FROM commentss WHERE postid = ?"
+    cursor.execute(sch,(postid,))
+    count = cursor.fetchone()[0]
+    return count
+
+#post lookup
 def get_posts(userid, curuser):
+    posts = []
     db = get_db()
     cursor = db.cursor()
     if userid == '*':
         cursor.execute("SELECT * FROM posts ORDER BY created_at DESC, id DESC")
     else: 
-        pstsch = "SELECT * FROM posts WHERE userid = ? ORDER BY created_at DESC, id DESC"
-        cursor.execute(pstsch, (userid,))
-    result = cursor.fetchall()
-    posts = []
-    for p in result:
-        avtsch = "SELECT avatar,username FROM users WHERE id = ?"
-        cursor.execute(avtsch,(p[1],))
-        result = cursor.fetchone()
-        avtr = result[0]
-        user = result[1]
-        likes = check_likes(p[0],curuser)
-        post = [p[0],user,avtr,p[2],p[3],p[4],likes[0],likes[1]]
+        sch = "SELECT * FROM posts WHERE userid = ? ORDER BY created_at DESC, id DESC"
+        cursor.execute(sch, (userid,))
+    dbpostsinfo = cursor.fetchall()
+    for p in dbpostsinfo:
+        userinfo = get_short_user_info(p[1])
+        likeinfo = []
+        likeinfo.append(get_like_count(p[0]))
+        likeinfo.append(is_liked(p[0],curuser))
+        post = [p,userinfo,likeinfo]
         posts.append(post)
-    for post in posts:
-        sch = "SELECT COUNT(*) FROM commentss WHERE postid = ?"
-        cursor.execute(sch,(post[0],))
-        count = cursor.fetchone()[0]
-        postcomments = []
-        sch = "SELECT * FROM commentss WHERE postid = ? ORDER BY created_at DESC"
-        cursor.execute(sch,(post[0],))
-        result = cursor.fetchall()
-        for comdata in result:
-            info = get_user_info(comdata[1],comdata[1])
-            user = info[1]
-            avatar = info[4]
-            comment = [user,avatar,comdata[3],comdata[4]]
-            postcomments.append(comment)
-        post.append(postcomments)
-        post.append(count)
+    for p in posts:
+        commentinfo = get_post_comment_info(p[0][0])
+        p.append([commentinfo,get_post_comment_count(p[0][0])])
     return posts
 
-
+#update
 def update_info(userid, new, parameter):
     db = get_db()
     cursor = db.cursor()
@@ -99,23 +110,18 @@ def update_info(userid, new, parameter):
         upsch = "UPDATE users SET username = ? WHERE id = ?"
     elif parameter == 'email':
         upsch = "UPDATE users SET email = ? WHERE id = ?"
+    elif parameter == 'admin':
+        upsch = "UPDATE users SET isadmin = ? WHERE id = ?"
     cursor.execute(upsch, (new, userid))
     db.commit()
 
-def get_user_info(userid,curuserid):
-    db = get_db()
-    cursor = db.cursor()
-    usrsch = "SELECT * FROM users WHERE id = ?"
-    cursor.execute(usrsch, (userid,))
-    result = cursor.fetchone()
-    info = []
-    for i in range(0,5):
-        info.append(result[i])
-    follows = check_follows(info[0],curuserid)
-    info.append(follows[0])
-    info.append(follows[1])
-    return info
+def toggle_admin(userid):
+    if get_db_user_info(userid)[6]:
+        update_info(userid, 0, "admin")
+    else:
+        update_info(userid, 1, "admin")
 
+#delete
 def delete_user(userid):
     db = get_db()
     cursor = db.cursor()
@@ -130,6 +136,7 @@ def delete_post(postid):
     cursor.execute(delsch, (postid,))
     db.commit()
 
+#Likes
 def toggle_like(postid,userid):
     db = get_db()
     cursor = db.cursor()
@@ -142,6 +149,24 @@ def toggle_like(postid,userid):
     cursor.execute(liksch,(userid,postid))
     db.commit()
 
+def get_like_count(postid):
+    db = get_db()
+    cursor = db.cursor()
+    sch = "SELECT COUNT(*) FROM likes WHERE postid = ?"
+    cursor.execute(sch,(postid,))
+    count = cursor.fetchone()[0]
+    return count
+
+def is_liked(postid,curuserid):
+    db = get_db()
+    cursor = db.cursor()
+    sch = "SELECT 1 FROM likes WHERE postid = ? AND userid = ?"
+    cursor.execute(sch,(postid,curuserid))
+    if cursor.fetchone():
+        return True
+    return False
+
+#follows
 def toggle_follow(eeid,erid):
     db = get_db()
     cursor = db.cursor()
@@ -154,30 +179,91 @@ def toggle_follow(eeid,erid):
     cursor.execute(flwsch,(eeid,erid))
     db.commit()
 
-def check_likes(postid, userid):
+def get_follow_count(eeid):
     db = get_db()
     cursor = db.cursor()
-    liksch = "SELECT COUNT(*) FROM likes WHERE postid = ?"
-    cursor.execute(liksch,(postid,))
+    sch = "SELECT COUNT(*) FROM follow WHERE fee = ?"
+    cursor.execute(sch,(eeid,))
     count = cursor.fetchone()[0]
-    liksch = "SELECT 1 FROM likes WHERE postid = ? AND userid = ?"
-    cursor.execute(liksch,(postid,userid))
-    if cursor.fetchone():
-        return count, 1
-    return count, 0
+    return count
 
-def check_follows(eeid, erid):
+def is_followed(eeid, erid):
     db = get_db()
     cursor = db.cursor()
-    flwsch = "SELECT COUNT(*) FROM follow WHERE fee = ?"
-    cursor.execute(flwsch,(eeid,))
-    count = cursor.fetchone()[0]
-    print(count)
-    flwsch = "SELECT 1 FROM follow WHERE fee = ? AND fer = ?"
-    cursor.execute(flwsch,(eeid,erid))
+    sch = "SELECT 1 FROM follow WHERE fee = ? AND fer = ?"
+    cursor.execute(sch,(eeid,erid))
     if cursor.fetchone():
-        return count, True
-    return count, False
+        return True
+    return False
+
+#userlookup
+def get_short_user_info(userid):
+    shortinfo = []
+    db = get_db()
+    cursor = db.cursor()
+    sch = "SELECT username,avatar FROM users WHERE id = ?"
+    cursor.execute(sch,(userid,))
+    result = cursor.fetchone()
+    for i in range(2):
+        shortinfo.append(result[i])
+    shortinfo.append(get_tag_info(userid))
+    shortinfo.append(userid)
+    return shortinfo
+
+def get_db_user_info(userid):
+    db = get_db()
+    cursor = db.cursor()
+    sch = "SELECT * FROM users WHERE id = ?"
+    cursor.execute(sch, (userid,))
+    result = cursor.fetchone()
+    userinfo = []
+    for i in range(8):
+        userinfo.append(result[i])
+    return userinfo
+
+def get_tag_info(userid):
+    db = get_db()
+    cursor = db.cursor()
+    taginfo = []
+    isadmin = get_db_user_info(userid)[6]
+    if userid == 0:
+        taginfo.append('Owner')
+        taginfo.append("#ff0000")
+        taginfo.append(0)
+    elif isadmin == True:
+        taginfo.append('Admin')
+        taginfo.append("#00ff00")
+        taginfo.append(1)
+    else:
+        taginfo.append('User')
+        taginfo.append("#0000ff")
+        taginfo.append(2)
+    return taginfo
+
+def get_all_user_info(userid,curuserid):
+    allinfo = []
+    dbuserinfo = get_db_user_info(userid)
+    followerinfo = []
+    followerinfo.append(get_follow_count(userid))
+    followerinfo.append(is_followed(userid,curuserid))
+    taginfo = get_tag_info(userid)
+    allinfo.append(dbuserinfo)
+    allinfo.append(followerinfo)
+    allinfo.append(taginfo)
+    return allinfo
+
+def get_users():
+    users = []
+    db = get_db()
+    cursor = db.cursor()
+    sch = "SELECT id FROM users ORDER BY id"
+    cursor.execute(sch)
+    result = cursor.fetchall()
+    for id in result:
+        user = get_short_user_info(id[0])
+        users.append(user)
+    print(users)
+    return users
 
 def identify(username):
     db = get_db()
@@ -195,6 +281,7 @@ def postid_to_userid(postid):
     result = cursor.fetchone()
     return result[0]
 
+#comments
 def comment_on_post(postid, userid, c):
     db = get_db()
     cursor = db.cursor()
