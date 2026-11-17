@@ -1,30 +1,30 @@
 /*Site*/
 div { display: flex }
 div.vignette {
+    width: 100%;
     border-radius: 50px;
     background-color: #050505;
     flex: 1;
-    flex-direction: column;
-    align-items: center;
     overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    justify-content: center;
 }
 
-div.body{
-    flex-direction: column;
+div.body {
+    width: 100%;
     align-items: center;
+    flex-direction: column;
     background: none;
 }
 
 body {
-    overflow: hidden;
     height: 100vh;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     background-color: #151515;
-    padding: 0px;
-    margin: 0px;
+    overflow: hidden;
 }
 
 span, p { color: white; }
@@ -47,10 +47,18 @@ img.avatar {
     object-fit: cover;
 }
 
+img.smallavatar {
+    width: 55px;
+    height: 55px;
+    border: 3px solid #DDDDDD;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
 img.tinyavatar {
-    width: 30px;
-    height: 30px;
-    border: 5% solid #DDDDDD;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #DDDDDD;
     border-radius: 100%;
     object-fit: cover;
 }
@@ -72,9 +80,10 @@ button:hover {
 }
 
 a.button:link, a.button:visited {
+    font-size: 150%;
     background-color: #333333;
     color: white;
-    padding: 15px 25px;
+    padding: 16px 30px;
     margin: 2px;
     border-radius: 10px;
     text-decoration: none;
@@ -83,29 +92,28 @@ a.button:link, a.button:visited {
     align-items: center;
 }
 
-a.button:hover, a.button:active {
-    border-radius: 10px;
-    background-color: #444444;
-}
+a.button:hover, a.button:active { background-color: #444444; }
 
 /*NavBar*/
-.nav { font-size:100%; }
+b.nav {
+    font-size: 150%;
+    background-color: #333333;
+    color: white;
+    padding: 16px 30px;
+    margin: 2px;
+    border-radius: 10px;
+}
+
+.nav { font-size:110%; }
 
 div.nav {
     display:flex;
     padding: 5px 10px;
-    background-color: #151515;
+    justify-content: space-between;
 }
 
-b.nav {
-    background-color: #333333;
-    color: white;
-    padding: 15px 25px;
-    margin: 2px;
-    border-radius: 10px;
-    text-decoration: none;
-    display: inline-flex;
-    gap: 6px;
+span.nav {
+    display:flex;
     align-items: center;
 }
 
@@ -118,14 +126,44 @@ a.button.topleft {
 }
 
 /*Posts*/
-div.post {
-    width: 600px;
-    flex-direction: column;
+textarea.caption,
+textarea.caption:hover,
+textarea.caption:focus,
+textarea.caption:Enabled,
+textarea.caption:active {
+    field-sizing: content;
+    min-height: 3rem;
+    margin-left: 15px;
+    margin-bottom: 0px;
+    width:93%;
+    max-width: 93%;
+    align-self: flex-start;
+    background: none;
+    color: white;
+    border: none;
+    outline: none;
+    resize: none;
+    height: auto;
+}
+
+span.badge {
+    display: flex;
+    text-decoration: none;
     align-items: center;
+    margin: 10px;
+    gap: 6px;
+}
+
+/*Post Viewing*/
+div.post {
+    width: 400px;
+    height: auto;
+    flex-direction: column;
     background-color: #111111;
     padding:8px;
+    align-items: center;
     border: 4px solid #333333;
-    margin-top: 10px;
+    margin: 10px 15px;
     border-radius: 20px;
 }
 
@@ -148,17 +186,9 @@ a.poster:hover {
     opacity: 75%;
 }
 
-img.smallavatar {
-    width: 55px;
-    height: 55px;
-    border: 5% solid #DDDDDD;
-    border-radius: 100%;
-    object-fit: cover;
-}
-
 span.poster {
     color: white;
-    font-size: 250%;
+    font-size: 150%;
 }
 
 button.like {
@@ -170,15 +200,15 @@ button.like {
 
 img.post {
     width: 95%;
-    max-height: 800px;
-    border: 5px solid #333333;
     height: auto;
+    max-height: 500px;
+    border: 5px solid #333333;
     object-fit: cover;
     border-radius: 20px;
 }
 
 p.caption {
-    font-size: 120%;
+    font-size: 100%;
     align-self: flex-start;
     overflow-wrap: anywhere;
     padding-left: 20px;
@@ -187,7 +217,7 @@ p.caption {
 }
 
 p.date {
-    font-size: 80%;
+    font-size: 70%;
     align-self: flex-end;
     padding-right: 10px;
     opacity: 70%;
@@ -197,6 +227,10 @@ div.commentbuttons {
     display: flex;
     justify-content: space-between;
     width: 100%;
+}
+
+button.comm {
+    font-size: 120%;
 }
 
 button.comm:hover {
@@ -363,6 +397,15 @@ input[type="password"] {
     margin-bottom: 12px;
 }
 
+label {
+    font-size: 120%;
+}
+
+input[type="radio"] {
+    transform: scale(2);
+    margin: 10px;
+}
+
 input[type="file"] {
     padding-left: 0px;
     margin-left: 0px;
@@ -394,10 +437,8 @@ form {
 
 div.forms {
     margin-bottom: 100px;
-    height: 100%;
     display: flex;
     width: 500px;
-    padding: 0px 0px;
     flex-direction: column;
     justify-content: center;
     align-items: center;

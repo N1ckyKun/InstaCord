@@ -7,17 +7,12 @@
     </head>
     <body>
         <div class="nav">
-            <b class="nav">InstaCord</b>
-            <a class="button nav" href="/login">Login</a>
+            <span>
+                <b class="nav">InstaCord</b>
+                <a class="button nav" href="/login">Login</a>
+            </span>
         </div>
         <div class="vignette">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for msg in messages %}
-                        <p>{{msg}}</p>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
             <div class = "forms">
                 <h1>Register</h1>
                 <form action="#" method="post">

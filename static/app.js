@@ -1,11 +1,11 @@
 async function updateLike(postid) {
-    const button = document.getElementById(postid);
+    const button = document.getElementById(`like${postid}`);
     const response = await fetch(`/like/${postid}`,{
         method: 'POST'
     });
     if(response.ok) {
         const data = await response.json();
-        button.textContent = `${data.liked ? '❤️' : '🤍'} ${data.count}`;
+        button.textContent = `${data.liked ? "\u2764\uFE0F" : "\u{1F90D}"} ${data.count}`;
     }
 }
 
@@ -101,5 +101,32 @@ async function adminUser(userid) {
         button.textContent = `${data.admin ? 'Unadmin' : 'Admin'}`;
         tag.style.backgroundColor = data.color;
         tag.textContent = data.name;
+    }
+}
+
+function update_preview() {
+    const input = document.getElementById('input');
+    const preview = document.getElementById('preview');
+    const file = input.files[0]; 
+        
+    if (file) {
+        preview.src = URL.createObjectURL(file); 
+        preview.style.display = 'block';
+    } else {
+        preview.src = '#';
+        preview.style.display = 'none';
+    }
+}
+
+async function deleteComment(comid,postid) {
+    const comm = document.getElementById(`com${comid}`);
+    const view = document.getElementById(`BView${postid}`);
+    const response = await fetch(`/deletecom/${comid}`,{
+        method: 'POST'
+    });
+    if (response.ok) {
+        comm.remove();
+        const data = await response.json();
+        view.textContent = `View Comments ${data.count}`
     }
 }

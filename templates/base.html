@@ -8,14 +8,22 @@
     </head>
     <body>
         <div class="nav">
-            <a class='button topleft' href="/account/{{selfdata()[0]}}">
-                <img class='smallavatar' src="{{selfdata()[1]}}" alt="pfp">
-                <span>{{selfdata()[0]}}</span>
-            </a>
-            <a class="button" href="/">Home</a>
-            <a class="button" href="/post">Create Moment</a>
-            <a class="button" href="/userlist">Users</a><br>
-            <a class="button" href="/logout">Logout</a><br>
+            <span class="nav">
+                <a class='button topleft' href="/account/{{selfdata()[1]}}">
+                    <img class='smallavatar' src="{{selfdata()[4]}}" alt="pfp">
+                    {{selfdata()[1]}}
+                </a>
+                <a class="button" href="/">Home</a>
+                <a class="button" href="/post">Create Moment</a>
+                <a class="button" href="/userlist">Users</a>
+            </span> 
+            <span class="nav">
+                <a class="button" href="/notis">Notifications</a>
+                {% if selfdata()[6] == 1 %}
+                    <a class="button" href="/reports">Reports</a>
+                {% endif %}
+                <a class="button" href="/logout">Logout</a>
+            </span>
         </div>
         <div class="vignette">
             <div class="body">

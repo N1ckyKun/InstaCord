@@ -7,17 +7,32 @@
     <span class="proftag">
         <span class="profile">{{info[0][1]}} </span>
         <span class='tag' style="background-color: {{info[2][1]}}">{{info[2][0]}}</span>
+        {% if info[0][0] == selfdata()[0]%}
+            <span style="margin-bottom: 10px;">(You)</span>
+        {% endif %}
     </span>
     <span id="count{{info[0][0]}}">{{info[1][0]}} Followers</span>
 </div>
 <div class="profilebuttons">
-    <a style="color: red" class="button" href="">Report User</a>
-    <button id="button{{info[0][0]}}" class="profile" onclick="followUser('{{info[0][0]}}')">
-        {{ "Following" if info[1][1] else "Follow User" }}
-    </button>
+    {% if info[0][0] == selfdata()[0]%}
+        <a class="button" href="/username">Change Username</a>
+        <a class="button" href="/avatar">Change Avatar</a>
+        <a class="button" href="/email">Change Email</a>
+        <a class="button" href="/password">Change Password</a>
+        <a style="color: red" class="button" href="/delete" method="post">Delete Account</a>
+    {% else %}
+        <a style="color: red" class="button" href="/report/{{info[0][0]}}">Report User</a>
+        <button id="button{{info[0][0]}}" class="profile" onclick="followUser('{{info[0][0]}}')">
+            {{ "Following" if info[1][1] else "Follow User" }}
+        </button>
+    {% endif %}
 </div>
 <hr><br><br><br>
 {% for p in posts %}
-    {{ render_post(p, False, False) }}
+    {% if (info[0][0] == selfdata()[0]) or selfdata()[6] == 1 %}
+        {{ render_post(p, False, True) }}
+    {% else %}
+        {{ render_post(p, False, False) }}
+    {% endif %}
 {% endfor %}
 {% endblock %}

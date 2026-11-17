@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% from "macros.html" import user_badge %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    {% for r in reports %}
+        <div class="userdiv">
+            {{ user_badge(r[1], size="small") }}
+            <p>Problematic {{r[0][2]}}, "{{r[0][3]}}"</p>
+        </div>
+    {% endfor %}
+{% endblock %}

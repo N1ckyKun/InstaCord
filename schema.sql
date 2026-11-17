@@ -39,3 +39,11 @@ CREATE TABLE IF NOT EXISTS commentss (
 
 INSERT OR IGNORE INTO users (id, username, email, pswd, isadmin)
 VALUES (0, 'm4ddie', 'nikolaskastrinakis@gmail.com', '123', 1);
+
+CREATE TABLE IF NOT EXISTS reports (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userid INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    reason TEXT NOT NULL,
+    details TEXT,
+    created_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

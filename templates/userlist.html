@@ -6,12 +6,12 @@
         <div id="user{{u[3]}}" class="userdiv">
             {{ user_badge(u, size="small") }}
             <span>
-            {% if (selfdata()[3] == 0 and u[2][2] != 0) or (selfdata()[2] == 1 and u[2][2] == 2) %}
+            {% if (selfdata()[0] == 0 and u[2][2] != 0) or (selfdata()[6] == 1 and u[2][2] == 2) %}
                 <button id="delete{{u[3]}}" class="profile" onclick="deleteUser('{{u[3]}}')">
                     Delete
                 </button>
             {% endif %}
-            {% if (selfdata()[3] == 0 and u[2][2] != 0) %}
+            {% if (selfdata()[0] == 0 and u[2][2] != 0) %}
                 <button id="admin{{u[3]}}" class="profile" onclick="adminUser('{{u[3]}}')">
                     {{ "Admin" if u[2][2] == 2 else "Unadmin"}}
                 </button>

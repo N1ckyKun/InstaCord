@@ -11,8 +11,8 @@ def get_db():
 
 def init_db():
     db = get_db()
-    schema = open("schema.sql")
-    db.executescript(schema.read())
+    with open("schema.sql") as schema:
+        db.executescript(schema.read())
 
 #checks
 def exists(input, type):
@@ -20,12 +20,16 @@ def exists(input, type):
     cursor = db.cursor()
     if type == 'user':
         chsch = "SELECT 1 FROM users WHERE username = ?"
-        cursor.execute(chsch, (input,))
-        return cursor.fetchone()
     elif type == 'email':
         chsch = "SELECT 1 FROM users WHERE email = ?"
-        cursor.execute(chsch, (input,))
-        return cursor.fetchone()
+    elif type == 'id':
+        chsch = "SELECT 1 FROM users WHERE id = ?"
+    elif type == 'postid':
+        chsch = "SELECT 1 FROM posts WHERE id = ?"
+    elif type == 'comid':
+        chsch = "SELECT 1 FROM commentss WHERE id = ?"
+    cursor.execute(chsch, (input,))
+    return cursor.fetchone()
 
 def isCorrect(userid,pswd):
     db = get_db()
@@ -39,11 +43,8 @@ def isCorrect(userid,pswd):
 def create_user(user,email,pswd):
     db = get_db()
     cursor = db.cursor()
-    with open('static/defavt.png', 'rb') as file:
-            encd_bytes = base64.b64encode(file.read()).decode('utf-8')
-            data_uri = f"data:image/png;base64,{encd_bytes}" 
     insch = "INSERT INTO users (username, email, pswd, avatar) VALUES (?,?,?,?)"
-    cursor.execute(insch, (user,email,pswd,data_uri))
+    cursor.execute(insch, (user,email,pswd,"/static/uploads/defavt.png"))
     db.commit()
 
 def create_post(mmnt,capt,userid):
@@ -262,7 +263,6 @@ def get_users():
     for id in result:
         user = get_short_user_info(id[0])
         users.append(user)
-    print(users)
     return users
 
 def identify(username):
@@ -287,4 +287,56 @@ def comment_on_post(postid, userid, c):
     cursor = db.cursor()
     insch = "INSERT INTO commentss (postid, userid, contents) VALUES (?,?,?)"
     cursor.execute(insch, (postid,userid,c))
+    db.commit()
+
+def comid_to_userid(comid):
+    db = get_db()
+    cursor = db.cursor()
+    idsch = "SELECT userid FROM commentss WHERE id = ?"
+    cursor.execute(idsch,(comid,))
+    result = cursor.fetchone()
+    return result[0]
+
+def comid_to_postid(comid):
+    db = get_db()
+    cursor = db.cursor()
+    idsch = "SELECT postid FROM commentss WHERE id = ?"
+    cursor.execute(idsch,(comid,))
+    result = cursor.fetchone()
+    return result[0]
+
+def delete_comment(comid):
+    db = get_db()
+    cursor = db.cursor()
+    delsch = "DELETE FROM commentss WHERE id = ?"
+    cursor.execute(delsch, (comid,))
+    db.commit()
+
+#reports
+def get_reports():
+    reports = []
+    db = get_db()
+    cursor = db.cursor()
+    sch = "SELECT * FROM reports"
+    cursor.execute(sch)
+    result = cursor.fetchall()
+    for r in result:
+        report = []
+        reportinfo = []
+        for i in range(5):
+            reportinfo.append(r[i])
+        report.append(reportinfo)
+        shortinfo = get_short_user_info(reportinfo[1])
+        report.append(shortinfo)
+        reports.append(report)
+    return reports
+
+        
+
+
+def create_report(reason,details,userid):
+    db = get_db()
+    cursor = db.cursor()
+    insch = "INSERT INTO reports (userid, reason, details) VALUES (?,?,?)"
+    cursor.execute(insch, (userid,reason,details))
     db.commit()

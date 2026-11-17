@@ -1,30 +1,28 @@
 {% extends "base.html" %}
 {% block title %}Create a Memory{% endblock %}
 {% block content %}
-<br><div class="forms">
-    <h1>Create</h1>
-    <form action="#" method="post" enctype="multipart/form-data">
-        <h3>Upload your Moment</h3>
-        <input id="moment" type="file" name="moment" onchange='update_preview()' accept="image/png" required/><br>
-        <img class='post' style='display: none;' id='preview' src="" alt="pfp">
-        <h3>Caption</h3>
-        <input type="text" name="caption" required/><br><br>
-        <input type="submit" value="submit"/><br><br>
-    </form>
+<div class="forms">
+    <div class="post" style="padding-bottom: 5px;">
+        <div class="postheader">
+            <span class="badge">
+                <img class="smallavatar" src="{{ shortinfo[1] }}" alt="pfp">
+                <span class="poster">{{ shortinfo[0] }}</span>
+                <span class="tag" style="background-color: {{ shortinfo[2][1] }}; font-size: 100%; margin-bottom: 0;">
+                    {{ shortinfo[2][0] }}
+                </span>
+            </span>
+        </div>
+        <form action="#" method="post" enctype="multipart/form-data">
+            <img class='post' style='display: none;' id='preview' src="" alt="pfp">
+            <input id="input" type="file" 
+                name="moment" onchange='update_preview()' accept="image/png, image/jpeg, image/webp" 
+                required style="margin-bottom: 0px; padding-bottom: 0px;"
+            /><br>
+            <textarea class="caption" type="text" name="caption" required 
+                autocomplete="off" style="font-size: 120%;" placeholder="Caption"
+            ></textarea><br>
+            <hr><input type="submit" value="submit" style="border-radius:10px;"/>
+        </form>
+    </div>
 </div>
-<script>
-    function update_preview() {
-        const input = document.getElementById('moment');
-        const preview = document.getElementById('preview');
-        const file = input.files[0]; 
-        
-        if (file) {
-            preview.src = URL.createObjectURL(file); 
-            preview.style.display = 'block';
-        } else {
-            preview.src = '#';
-            preview.style.display = 'none';
-        }
-    }
-</script>
 {% endblock %}

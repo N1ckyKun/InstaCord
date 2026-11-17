@@ -9,18 +9,18 @@
 {% endmacro %}
 
 {% macro render_post(p, showuser = "false", showdelete = "true") %}
-    <div id="post{{p[0][0]}}" class="post">
+    <div style="display:inline-flex" id="post{{p[0][0]}}" class="post">
         <div class="postheader">
             {% if showdelete %}
                 <button style="color: red" class="delete" data-postid="{{p[0][0]}}" onclick="deletePost('{{p[0][0]}}')" type="button">
-                    &#128939
+                    &#128939;
                 </button>
             {% endif %}
             {% if showuser %}
-                {{ user_badge(p[1], 'small') }}
+                {{ user_badge(p[1], 'tiny') }}
             {% endif %}
-            <button class="like" id="{{p[0][0]}}" data-postid="{{p[0][0]}}" onclick="updateLike('{{p[0][0]}}')" type="button">
-                {{ "❤️" if p[2][1] else "🤍" }} {{p[2][0]}}
+            <button class="like" id="like{{p[0][0]}}" onclick="updateLike('{{p[0][0]}}')" type="button">
+                {{ "\u2764\uFE0F" if p[2][1] else "\U0001F90D" }} {{p[2][0]}}
             </button>
         </div>
         <img class='post' src="{{p[0][2]}}" alt="Moment">
@@ -31,25 +31,28 @@
                 Post Comment
             </button>
             <button id="BView{{p[0][0]}}" onclick="toggleView('{{p[0][0]}}')" type="button" class="comm">
-                View Comments
+                View Comments {{p[3][1]}}
             </button>
         </div>
     </div>
     <div id="View{{p[0][0]}}" class="post" style="display: none">
         {% for c in p[3][0] %}
-            <div class="comment">
+            <div id="com{{c[0][0]}}"" class="comment">
                 <div class="comheader">
                     <a class = 'commenter' href="/account/{{c[1][0]}}">
                         <img class='tinyavatar' src="{{c[1][1]}}" alt="pfp">
                         <span class="commenter"><b>{{c[1][0]}}</b></span>
                     </a>
+                    <button style="color: red;" class="delete" onclick="deleteComment('{{c[0][0]}}','{{p[0][0]}}')" type="button">
+                        &#128939;
+                    </button>
                 </div>
                 <span class="comment">
                     <span>{{c[0][3]}}</span>
                     <span class="date">created at {{c[0][4]}}</span>
                 </span>
+                <hr>
             </div>
-            <hr>
         {% endfor %}
     </div>
     <div id="Comm{{p[0][0]}}" class="post" style="display: none">

@@ -5,24 +5,9 @@
     <br>
     <h1>Change Avatar</h1>
     <form action="#" method="post" enctype="multipart/form-data">
-        <input id='avatar' onchange='update_preview()' type="file" name="avatar" accept="image/png" required/><br>
+        <input id='input' onchange='update_preview()' type="file" name="avatar" accept="image/png, image/jpeg, image/webp" required/><br>
         <img class='acc forms' style='display: none;' id='preview' src="" alt="pfp">
         <input class='forms' type="submit" value="submit"/>
     </form>
 </div>
-<script>
-    function update_preview() {
-        const input = document.getElementById('avatar');
-        const preview = document.getElementById('preview');
-        const file = input.files[0]; 
-        
-        if (file) {
-            preview.src = URL.createObjectURL(file); 
-            preview.style.display = 'block';
-        } else {
-            preview.src = '#';
-            preview.style.display = 'none';
-        }
-    }
-</script>
 {% endblock %}
